@@ -6,7 +6,7 @@ import { Italianno } from "next/font/google";
 
 
 const clash = localFont({
-  src: "../fonts/clash/ClashDisplay-Regular.woff",
+  src: "./fonts/clash/ClashDisplay-Regular.woff",
   variable: "--font-clash", // important: expose as CSS variable
 });
 
