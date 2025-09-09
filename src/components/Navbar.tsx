@@ -3,6 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { IoSearchOutline } from "react-icons/io5";
+import { BsBagCheck } from "react-icons/bs";
+import { RiMenu4Line } from "react-icons/ri";
 
 const NAV_LINKS = [
   { label: "Men", href: "/products?gender=men" },
@@ -13,9 +16,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky bg-[#313afb] top-0 z-50">
+    <header className="sticky bg-amber-50 top-0 z-50">
       {/* Navbar container */}
-      <div className="relative border-b-[1px] border-b-amber-200 mx-5">
+      <div className="relative border-b-[1px] border-b-neutral-400 mx-5 md:mx-10 lg:mx-20 ">
 
         {/* Navbar content */}
         <nav
@@ -27,7 +30,7 @@ export default function Navbar() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="text-body text-[#f9f3e9] transition-colors hover:text-dark-700"
+                  className="text-body text-black transition-colors hover:text-dark-700"
                 >
                   {l.label}
                 </Link>
@@ -45,30 +48,29 @@ export default function Navbar() {
               alt="Nike"
               fill
               priority
-              className="object-contain"
+              className="object-contain filter brightness-0"
             />
           </Link>
 
-          <div className="hidden items-center gap-6 md:flex">
-            <button className="text-body text-[#f9f3e9] transition-colors hover:text-dark-700">
-              Search
-            </button>
-            <button className="text-body text-[#f9f3e9] transition-colors hover:text-dark-700">
-              My Cart
-            </button>
+          <div className="hidden items-center gap-2 md:flex">
+             
+                <div className=" h-12 w-12  bg-black text-amber-50 text-xl text-center flex justify-center items-center rounded-full ">
+                  <IoSearchOutline />
+                </div>
+                <div className=" h-12 w-12  bg-black text-amber-50 text-xl text-center flex justify-center items-center rounded-full ">
+                  <BsBagCheck />
+                </div>
+
           </div>
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 md:hidden"
+            className="inline-flex items-center h-12 w-12 justify-center rounded-md md:hidden"
             aria-controls="mobile-menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            <span className="sr-only">Toggle navigation</span>
-            <span className="mb-1 block h-0.5 w-6 bg-dark-900"></span>
-            <span className="mb-1 block h-0.5 w-6 bg-dark-900"></span>
-            <span className="block h-0.5 w-6 bg-dark-900"></span>
+            <RiMenu4Line className="w-8 h-8 fill-black" />
           </button>
         </nav>
 

@@ -50,13 +50,13 @@ export default function Card({
         />
       </div>
       <div className="px-2 md:px-3">
-        <div className=" flex flex-col  text-[#f9f3e9] ">
+        <div className=" flex flex-col  text-black ">
           <h3 className=" text-xl font-bold ">{title}</h3>
-          {displayPrice && <span className="   ">{displayPrice}</span>}
+          {displayPrice && <span className="text-black">{displayPrice}</span>}
         </div>
 
         <Link href={href ?? "#"} className=" w-full ">
-          <div className="mt-2 text-md tracking-widest  font-bold rounded-md border-[1px] border-[#f9f3e9] px-3 py-2 text-[#43045e] text-center bg-[#f9f3e9]  hover:text-[#43045e]">
+          <div className="mt-2 text-md tracking-widest  font-bold rounded-md bg-black text-amber-50  border-[1px] border-[#f9f3e9] px-3 py-2  text-center   ">
             ADD +
           </div>
         </Link>

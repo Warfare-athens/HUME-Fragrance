@@ -28,7 +28,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12">
           <div className="flex items-start md:col-span-3">
-            <Image src="/HF logo bg.png" alt="HUME Fragrance" width={60} height={60} />
+            <Image src="/HF logo bg.png" className="fill-red-100" alt="HUME Fragrance" width={60} height={60} />
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 md:col-span-7">

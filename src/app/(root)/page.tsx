@@ -3,6 +3,8 @@ import React from "react";
 import { Card } from "@/components";
 import { getCurrentUser } from "@/lib/auth/actions";
 import { getAllProducts } from "@/lib/actions/product";
+import Categories from "@/components/Categories";
+import Showcase from "@/components/Showcase";
 
 
 
@@ -11,7 +13,11 @@ const Home = async () => {
   const { products, totalCount } = await getAllProducts({});
 
   return (
-    <main className="mx-auto mt-6 sm:mt-14 max-w-7xl px-0 sm:px-0 lg:px-0">
+    <main className="mx-auto mt-6  max-w-7xl px-0 sm:px-0 lg:px-0">
+
+      <Showcase />
+
+      <Categories />
 
       {/* Product Cards */}
       <section aria-labelledby="latest" className="pb-12">
