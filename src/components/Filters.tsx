@@ -4,7 +4,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { getArrayParam, removeParams, toggleArrayParam } from "@/lib/utils/query";
 
-const GENDERS = ["men", "women", "unisex"] as const;
 const SIZES = ["XS", "S", "M", "L", "XL"] as const;
 const COLORS = ["black", "white", "red", "green", "blue", "grey"] as const;
 const PRICES = [
@@ -14,7 +13,7 @@ const PRICES = [
   { id: "150-", label: "Over $150" },
 ] as const;
 
-type GroupKey = "gender" | "size" | "color" | "price";
+type GroupKey = "size" | "color" | "price";
 
 export default function Filters() {
   const router = useRouter();
@@ -24,14 +23,12 @@ export default function Filters() {
 
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<Record<GroupKey, boolean>>({
-    gender: true,
     size: true,
     color: true,
     price: true,
   });
 
   const activeCounts = {
-    gender: getArrayParam(search, "gender").length,
     size: getArrayParam(search, "size").length,
     color: getArrayParam(search, "color").length,
     price: getArrayParam(search, "price").length,
@@ -47,7 +44,7 @@ export default function Filters() {
   };
 
   const clearAll = () => {
-    const url = removeParams(pathname, search, ["gender", "size", "color", "price", "page"]);
+    const url = removeParams(pathname, search, ["size", "color", "price", "page"]);
     router.push(url, { scroll: false });
   };
 
@@ -98,28 +95,6 @@ export default function Filters() {
             Clear all
           </button>
         </div>
-
-        <Group title={`Gender ${activeCounts.gender ? `(${activeCounts.gender})` : ""}`} k="gender">
-          <ul className="space-y-2">
-            {GENDERS.map((g) => {
-              const checked = getArrayParam(search, "gender").includes(g);
-              return (
-                <li key={g} className="flex items-center gap-2">
-                  <input
-                    id={`gender-${g}`}
-                    type="checkbox"
-                    className="h-4 w-4 accent-dark-900"
-                    checked={checked}
-                    onChange={() => onToggle("gender" as GroupKey, g)}
-                  />
-                  <label htmlFor={`gender-${g}`} className="text-body text-dark-900">
-                    {g[0].toUpperCase() + g.slice(1)}
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
-        </Group>
 
         <Group title={`Size ${activeCounts.size ? `(${activeCounts.size})` : ""}`} k="size">
           <ul className="grid grid-cols-5 gap-2">
@@ -203,28 +178,6 @@ export default function Filters() {
             </div>
             {/* Reuse the same desktop content by rendering the component again */}
             <div className="md:hidden">
-              <Group title="Gender" k="gender">
-                <ul className="space-y-2">
-                  {GENDERS.map((g) => {
-                    const checked = getArrayParam(search, "gender").includes(g);
-                    return (
-                      <li key={g} className="flex items-center gap-2">
-                        <input
-                          id={`m-gender-${g}`}
-                          type="checkbox"
-                          className="h-4 w-4 accent-dark-900"
-                          checked={checked}
-                          onChange={() => onToggle("gender", g)}
-                        />
-                        <label htmlFor={`m-gender-${g}`} className="text-body">
-                          {g[0].toUpperCase() + g.slice(1)}
-                        </label>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </Group>
-
               <Group title="Size" k="size">
                 <ul className="grid grid-cols-4 gap-2">
                   {SIZES.map((s) => {

@@ -1,5 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaSquareFacebook } from "react-icons/fa6";
+import { FaInstagramSquare } from "react-icons/fa";
+
+
 
 const columns = [
   {
@@ -22,7 +26,7 @@ const columns = [
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#f9f3e9] text-[#43045e]">
+    <footer className="relative bg-black  text-amber-50">
       {/* Optional: Add a subtle wave or plant background image for essential oil theme */}
       
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 relative z-10">
@@ -53,17 +57,16 @@ export default function Footer() {
 
           <div className="flex gap-4 md:col-span-2 md:justify-end">
             {[
-              { src: "/icon-instagram.svg", alt: "Instagram" },
-              { src: "/icon-facebook.svg", alt: "Facebook" },
-              { src: "/icon-pinterest.svg", alt: "Pinterest" },
+              { src: <FaSquareFacebook/> , alt: "Facebook" },
+              { src: <FaInstagramSquare/> ,alt: "Pinterest" },
             ].map((s) => (
               <Link
                 key={s.alt}
                 href="#"
                 aria-label={s.alt}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#232323] hover:bg-[#b6e2d3] transition-colors"
+                className="inline-flex h-10 w-10 text-3xl items-center justify-center rounded-md bg-[#232323] hover:bg-[#b6e2d3] "
               >
-                <Image src={s.src} alt={s.alt} width={20} height={20} />
+                {s.src}
               </Link>
             ))}
           </div>

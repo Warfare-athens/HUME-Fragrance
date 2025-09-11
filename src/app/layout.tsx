@@ -1,16 +1,16 @@
+
+
 import type { Metadata } from "next";
 import "./globals.css";
+import localFont  from "next/font/local";
 import { Italianno } from "next/font/google";
 
 
 
-
-const italianno = Italianno({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-italianno", // important
+const clash = localFont({
+  src: "../../public/fonts/ClashDisplay-Regular.woff",
+  variable: "--font-clash", // important: expose as CSS variable
 });
-
 
 
 
@@ -23,10 +23,12 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${italianno.variable}`} // ✅ attach vars
+      className={`${clash.variable} `} // ✅ attach vars
     >
       <body className="antialiased bg">{children}</body>
     </html>
   );
 }
+
+
 

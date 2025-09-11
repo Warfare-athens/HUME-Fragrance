@@ -21,7 +21,7 @@ const showcaseImages = [
     <div className="min-h-screen bg-amber-50">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-background via-card to-muted">
-        <div className="absolute inset-0 bg-[url('/abstract-tech-circuit.png')] opacity-5"></div>
+        <div className="absolute inset-0   opacity-5"></div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
          

@@ -34,8 +34,6 @@ export default function Card({
   badge,
   className = "",
 }: CardProps) {
-  const displayPrice =
-    price === undefined ? undefined : typeof price === "number" ? `$${price.toFixed(2)}` : price;
   const content = (
     <article
       className={`group rounded-xl   transition-colors hover:ring-dark-500 ${className}`}
@@ -51,15 +49,11 @@ export default function Card({
       </div>
       <div className="px-2 md:px-3">
         <div className=" flex flex-col  text-black ">
-          <h3 className=" text-xl font-bold ">{title}</h3>
-          {displayPrice && <span className="text-black">{displayPrice}</span>}
+          <h3 className=" text-2xl md:text-3xl font-medium ">{title}</h3>
+          <h4 className=" text-base md:text-lg md:font-medium mt-1 mb-3">
+          {price && <span className="text-black"> <span>&#8377;</span> {price} / Kg</span>}
+          </h4>
         </div>
-
-        <Link href={href ?? "#"} className=" w-full ">
-          <div className="mt-2 text-md tracking-widest  font-bold rounded-md bg-black text-amber-50  border-[1px] border-[#f9f3e9] px-3 py-2  text-center   ">
-            ADD +
-          </div>
-        </Link>
         
       </div>
     </article>

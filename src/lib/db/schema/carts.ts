@@ -3,7 +3,7 @@ import { relations } from 'drizzle-orm';
 import { z } from 'zod';
 import { users } from './user';
 import { guests } from './guest';
-import { productVariants } from './variants';
+import { products } from './products';
 
 export const carts = pgTable('carts', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -16,7 +16,7 @@ export const carts = pgTable('carts', {
 export const cartItems = pgTable('cart_items', {
   id: uuid('id').primaryKey().defaultRandom(),
   cartId: uuid('cart_id').references(() => carts.id, { onDelete: 'cascade' }).notNull(),
-  productVariantId: uuid('product_variant_id').references(() => productVariants.id, { onDelete: 'restrict' }).notNull(),
+  productId: uuid('product_id').references(() => products.id, { onDelete: 'cascade' }).notNull(), // Added productId
   quantity: integer('quantity').notNull().default(1),
 });
 
@@ -37,9 +37,9 @@ export const cartItemsRelations = relations(cartItems, ({ one }) => ({
     fields: [cartItems.cartId],
     references: [carts.id],
   }),
-  variant: one(productVariants, {
-    fields: [cartItems.productVariantId],
-    references: [productVariants.id],
+  product: one(products, { // Added product relation
+    fields: [cartItems.productId],
+    references: [products.id],
   }),
 }));
 
@@ -57,7 +57,7 @@ export type SelectCart = z.infer<typeof selectCartSchema>;
 
 export const insertCartItemSchema = z.object({
   cartId: z.string().uuid(),
-  productVariantId: z.string().uuid(),
+  productId: z.string().uuid(), // Added productId
   quantity: z.number().int().min(1),
 });
 export const selectCartItemSchema = insertCartItemSchema.extend({

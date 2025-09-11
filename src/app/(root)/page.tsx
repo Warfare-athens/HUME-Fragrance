@@ -21,21 +21,15 @@ const Home = async () => {
 
       {/* Product Cards */}
       <section aria-labelledby="latest" className="pb-12">
-        <div className="font-clash grid grid-cols-2 gap-2 md:gap-6 sm:grid-cols-3 lg:grid-cols-4 pb-6">
+        <div className="  grid grid-cols-2 gap-2 md:gap-6 md:grid-cols-3  space-y-8 pb-6">
           {products.map((p) => {
-            const price =
-              p.minPrice !== null && p.maxPrice !== null && p.minPrice !== p.maxPrice
-                ? `$${p.minPrice.toFixed(2)} - $${p.maxPrice.toFixed(2)}`
-                : p.minPrice !== null
-                ? p.minPrice
-                : undefined;
             return (
               <Card
                 key={p.id}
-                title={p.name}
+                title={p.title}
                 subtitle={p.subtitle ?? undefined}
                 imageSrc={p.imageUrl ?? "/shoes/shoe-1.jpg"}
-                price={price}
+                price={p.price}
                 href={`/products/${p.id}`}
               />
             );

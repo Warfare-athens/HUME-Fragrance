@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1757485142535,
+      "tag": "0000_wandering_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1757491390828,
+      "tag": "0001_silky_deadpool",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1757508213586,
+      "tag": "0002_redundant_toro",
+      "breakpoints": true
+    }
+  ]
+}

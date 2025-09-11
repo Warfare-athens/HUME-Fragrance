@@ -17,6 +17,7 @@ interface CartState {
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   getItemCount: () => number;
+  setCart: (cart: { items: CartItem[]; total: number }) => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -64,6 +65,7 @@ export const useCartStore = create<CartState>()(
       },
       clearCart: () => set({ items: [], total: 0 }),
       getItemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
+      setCart: (cart) => set({ items: cart.items, total: cart.total }),
     }),
     {
       name: 'cart-storage',

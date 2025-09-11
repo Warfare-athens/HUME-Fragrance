@@ -5,6 +5,7 @@ import cosmeticBeautyImage from "../../public/categories/cosmetic.png";
 import othersLifestyleImage from "../../public/categories/others.png";
 
 const Categories = () => {
+  
   const category = [
     {
       title: "Health & Wellness",
@@ -36,13 +37,13 @@ const Categories = () => {
     <main className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative px-4 sm:px-6 lg:px-8 bg-gradient-soft">
-        <div className="max-w-4xl mx-auto text-center ">
+        <div className="max-w-4xl mx-auto mt-20 sm:mt-0 text-center ">
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground tracking-tight">
-              Shop With Categories
+            <h1 className=" text-4xl md:text-5xl lg:text-6xl font-light text-foreground tracking-tight">
+              Explore Our Essential Oils
             </h1>
             <p className=" hidden md:block text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Clinically proven and advanced botanical formulas that transform the state of your well-being.
+              Discover our collection of pure, therapeutic-grade essential oils, crafted to elevate your well-being.
             </p>
           </div>
         </div>
