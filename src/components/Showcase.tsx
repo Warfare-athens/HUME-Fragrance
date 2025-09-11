@@ -18,7 +18,7 @@ const showcaseImages = [
 
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-[var(--background)]">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-background via-card to-muted">
         <div className="absolute inset-0   opacity-5"></div>
@@ -30,7 +30,7 @@ const showcaseImages = [
             
               {/* Hero Content */}
             <div className="space-y-6">
-              <Badge variant="secondary" className="w-fit bg-green-100/70 text-green-700 border-green-300/40">
+              <Badge variant="secondary" className="w-fit bg-green-100/70 text-green-700 border-green-300/40 dark:bg-green-900/70 dark:text-green-300 dark:border-green-700/40">
                 <Zap className="w-4 h-4 mr-2" />
                 Pure Botanical Wellness
               </Badge>
@@ -45,10 +45,10 @@ const showcaseImages = [
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/products" className=" flex items-center justify-center rounded-lg font-semibold text-md bg-black text-amber-50 border-2 px-6 h-12 border-black  hover:bg-primary/5">
+                <Link href="/bulk-order" className=" flex items-center justify-center rounded-lg font-semibold text-md bg-[var(--foreground)] text-[var(--background)] border-2 px-6 h-12 border-[var(--foreground)]  hover:bg-primary/5">
                   Quote for BULK ORDERS
                 </Link>
-                <Link href="/products" className=" flex items-center justify-center rounded-lg font-semibold text-md bg-transparent border-2 px-6 h-12 border-black  hover:bg-primary/5">
+                <Link href="/products" className=" flex items-center justify-center rounded-lg font-semibold text-md bg-transparent border-2 px-6 h-12 border-[var(--foreground)]  hover:bg-primary/5">
                   SHOP
                 </Link>
               </div>

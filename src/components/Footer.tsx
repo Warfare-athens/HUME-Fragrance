@@ -26,7 +26,7 @@ const columns = [
 
 export default function Footer() {
   return (
-    <footer className="relative bg-black  text-amber-50">
+    <footer className="relative bg-[var(--color-light-100)]  text-[var(--color-dark-900)]">
       {/* Optional: Add a subtle wave or plant background image for essential oil theme */}
       
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 relative z-10">
@@ -64,7 +64,7 @@ export default function Footer() {
                 key={s.alt}
                 href="#"
                 aria-label={s.alt}
-                className="inline-flex h-10 w-10 text-3xl items-center justify-center rounded-md bg-[#232323] hover:bg-[#b6e2d3] "
+                className="inline-flex h-10 w-10 text-3xl items-center justify-center rounded-md bg-[var(--color-light-200)] hover:bg-[#b6e2d3] "
               >
                 {s.src}
               </Link>
@@ -73,8 +73,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-[#333]">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 text-neutral-400 sm:flex-row sm:px-6 lg:px-8">
+      <div className="border-t border-[var(--color-light-300)]">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 text-[var(--color-dark-500)] sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 text-caption">
             <Image src="/icon-globe.svg" alt="" width={16} height={16} />
             <span>Worldwide</span>
@@ -83,7 +83,7 @@ export default function Footer() {
           <ul className="flex items-center gap-6 text-caption">
             {["Guides", "Terms of Sale", "Terms of Use", "Privacy Policy"].map((t) => (
               <li key={t}>
-                <Link href="#" className="hover:text-white transition-colors">{t}</Link>
+                <Link href="#" className="hover:text-[var(--color-dark-900)] transition-colors">{t}</Link>
               </li>
             ))}
           </ul>

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @theme {
+  --background: oklch(98.7% 0.022 95.277);
+  --foreground: #111111;
+
   --sk-sea-shade: #1e90ff;
 
   /* Dark shades */
@@ -60,6 +63,21 @@
   --text-footnote--font-weight: 400;
 }
 
+.dark {
+  --background: #111111;
+  --foreground: #ffffff;
+
+  --color-dark-900: #ffffff;
+  --color-dark-700: #f5f5f5;
+  --color-dark-500: #e5e5e5;
+
+  --color-light-100: #111111;
+  --color-light-200: #222222;
+  --color-light-300: #333333;
+  --color-light-400: #444444;
+}
+
 body {
-  background-color: oklch(98.7% 0.022 95.277);
+  background-color: var(--background);
+  color: var(--foreground);
 }

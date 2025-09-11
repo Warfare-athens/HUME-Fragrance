@@ -1,5 +1,7 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export type BadgeTone = "red" | "green" | "orange";
 
@@ -9,8 +11,10 @@ export interface CardProps {
   subtitle?: string;
   meta?: string | string[];
   imageSrc: string;
+  imageSrcHover?: string; // New prop for hover image
   imageAlt?: string;
-  price?: string | number;
+  minPrice?: string | number;
+  maxPrice?: string | number;
   href?: string;
   badge?: { label: string; tone?: BadgeTone };
   className?: string;
@@ -28,19 +32,29 @@ export default function Card({
   subtitle,
   meta,
   imageSrc,
+  imageSrcHover, // Destructure new prop
   imageAlt = title,
-  price,
+  minPrice,
+  maxPrice,
   href,
   badge,
   className = "",
 }: CardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const currentImage = isHovered && imageSrcHover ? imageSrcHover : imageSrc;
+
   const content = (
     <article
-      className={`group rounded-xl   transition-colors hover:ring-dark-500 ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`group rounded-xl   transition-colors hover:ring-[var(--color-dark-500)] ${className}`}
     >
-      <div className="relative  text-[#f9f3e9] aspect-square overflow-hidden  ">
+      <div
+        className="relative  text-[#f9f3e9] aspect-square overflow-hidden  "
+      >
         <Image
-          src={imageSrc}
+          src={currentImage}
           alt={imageAlt}
           fill
           sizes="(min-width: 1280px) 360px, (min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
@@ -48,10 +62,18 @@ export default function Card({
         />
       </div>
       <div className="px-2 md:px-3">
-        <div className=" flex flex-col  text-black ">
+        <div className=" flex flex-col  text-[var(--color-dark-900)] ">
           <h3 className=" text-2xl md:text-3xl font-medium ">{title}</h3>
           <h4 className=" text-base md:text-lg md:font-medium mt-1 mb-3">
-          {price && <span className="text-black"> <span>&#8377;</span> {price} / Kg</span>}
+          {minPrice && maxPrice && (
+              <span className="text-[var(--color-dark-900)]">
+                <span>&#8377;</span>{" "}
+                {minPrice === maxPrice
+                  ? minPrice
+                  : `${minPrice} - ${maxPrice}`}{" "}
+                / 100 ml
+              </span>
+            )}
           </h4>
         </div>
         

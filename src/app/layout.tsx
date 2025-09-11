@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont  from "next/font/local";
 import { Italianno } from "next/font/google";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 
 
@@ -24,11 +25,22 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
     <html
       lang="en"
       className={`${clash.variable} `} // ✅ attach vars
+      suppressHydrationWarning
     >
-      <body className="antialiased bg">{children}</body>
+      <body className="antialiased bg">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
 
 
 
+  

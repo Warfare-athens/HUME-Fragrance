@@ -11,7 +11,7 @@ import { type Review } from "@/lib/actions/product"; // Removed RecommendedProdu
 
 function formatPrice(price: number | null | undefined) {
   if (price === null || price === undefined) return undefined;
-  return `$${price.toFixed(2)}`;
+  return `${price.toFixed(2)}`;
 }
 
 export default function ProductDetailsClient({
@@ -19,25 +19,11 @@ export default function ProductDetailsClient({
   images,
   reviews,
 }: {
-  product: any; // Assuming product now has price directly
+  product: { id: string; minPrice: string | number; maxPrice: string | number; description: string; title: string; subtitle?: string; };
   images: any[];
   reviews: Review[];
 }) {
   const addToCart = useCartStore((state) => state.addItem);
-
-  // Assuming product has price and salePrice directly
-  const basePrice = product.price ? Number(product.price) : null;
-  const salePrice = product.salePrice ? Number(product.salePrice) : null;
-
-  const displayPrice =
-    salePrice !== null && !Number.isNaN(salePrice) ? salePrice : basePrice;
-  const compareAt =
-    salePrice !== null && !Number.isNaN(salePrice) ? basePrice : null;
-
-  const discount =
-    compareAt && displayPrice && compareAt > displayPrice
-      ? Math.round(((compareAt - displayPrice) / compareAt) * 100)
-      : null;
 
   const reviewsCount = reviews.length;
   const reviewsAvg =
@@ -51,7 +37,7 @@ export default function ProductDetailsClient({
   }];
 
   return (
-    <main className="mx-auto h-screen max-w-7xl px-4 sm:px-6 lg:px-8">
+    <main className="mx-auto min-h-screen max-w-7xl px-4 sm:px-6 lg:px-8">
       <section className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_480px]">
           <ProductGallery
             productId={product.id}
@@ -61,29 +47,24 @@ export default function ProductDetailsClient({
 
         <div className="flex flex-col gap-6 ">
           <header className="flex flex-col lg:mt-10  gap-2">
-            <h1 className=" font-clash text-dark-900">{product.title}</h1>
+            <h1 className=" font-clash text-3xl text-[var(--color-dark-900)]">{product.title}</h1>
             {product.subtitle && (
-              <p className="text-body text-dark-700">{product.subtitle}</p>
+              <p className="text-body text-[var(--color-dark-700)]">{product.subtitle}</p>
             )}
-            
+
           </header>
 
           <div className="flex items-center gap-3">
-            <p className="text-lead text-dark-900">
-              {formatPrice(displayPrice)}
+            <p className="text-lead text-[var(--color-dark-900)]">
+              {product.minPrice && product.maxPrice && (
+                <>
+                  <span>&#8377;</span>{" "}
+                  {product.minPrice === product.maxPrice
+                    ? formatPrice(Number(product.minPrice))
+                    : `${formatPrice(Number(product.minPrice))} - ${formatPrice(Number(product.maxPrice))}`}
+                </>
+              )}
             </p>
-            {compareAt && (
-              <>
-                <span className="text-body text-dark-700 line-through">
-                  {formatPrice(compareAt)}
-                </span>
-                {discount !== null && (
-                  <span className="rounded-full border border-light-300 px-2 py-1 text-caption text-[--color-green]">
-                    {discount}% off
-                  </span>
-                )}
-              </>
-            )}
           </div>
 
           <div className="flex flex-col gap-3">
@@ -115,10 +96,10 @@ export default function ProductDetailsClient({
                 {reviews.slice(0, 10).map((r) => (
                   <li
                     key={r.id}
-                    className="rounded-lg border border-light-300 p-4"
+                    className="rounded-lg border border-[var(--color-light-300)] p-4"
                   >
                     <div className="mb-1 flex items-center justify-between">
-                      <p className="text-body-medium text-dark-900">
+                      <p className="text-body-medium text-[var(--color-dark-900)]">
                         {r.author}
                       </p>
                       <span className="flex items-center gap-1">
@@ -126,16 +107,16 @@ export default function ProductDetailsClient({
                       </span>
                     </div>
                     {r.title && (
-                      <p className="text-body-medium text-dark-900">
+                      <p className="text-body-medium text-[var(--color-dark-900)]">
                         {r.title}
                       </p>
                     )}
                     {r.content && (
-                      <p className="mt-1 line-clamp-[8] text-body text-dark-700">
+                      <p className="mt-1 line-clamp-[8] text-body text-[var(--color-dark-700)]">
                         {r.content}
                       </p>
                     )}
-                    <p className="mt-2 text-caption text-dark-700">
+                    <p className="mt-2 text-caption text-[var(--color-dark-700)]">
                       {new Date(r.createdAt).toLocaleDateString()}
                     </p>
                   </li>

@@ -9,7 +9,8 @@ export const products = pgTable('products', {
   title: text('title').notNull(),
   subtitle: text('subtitle'),
   description: text('description').notNull(),
-  price: decimal('price', { precision: 10, scale: 2 }).notNull(),
+  minPrice: decimal('min_price', { precision: 10, scale: 2 }).notNull(),
+  maxPrice: decimal('max_price', { precision: 10, scale: 2 }).notNull(),
   isPublished: boolean('is_published').notNull().default(false),
 
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -24,7 +25,8 @@ export const insertProductSchema = z.object({
   title: z.string().min(1),
   subtitle: z.string().optional(),
   description: z.string().min(1),
-  price: z.number(),
+  minPrice: z.number(),
+  maxPrice: z.number(),
   isPublished: z.boolean().optional(),
 
   createdAt: z.date().optional(),

@@ -67,16 +67,16 @@ export default function ProductCarousel({ categories }: ProductCarouselProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </Card>
-                <div className=" absolute top-2 right-3 h-10 w-10  bg-amber-50 text-black   text-xl text-center flex justify-center items-center rounded-full "><CiBookmarkPlus /></div>
+                <div className=" absolute top-2 right-3 h-10 w-10  bg-[var(--background)] text-[var(--foreground)]   text-xl text-center flex justify-center items-center rounded-full "><CiBookmarkPlus /></div>
 
 
               <div className=" absolute bottom-0 left-0 z-30 flex justify-evenly  bg-transparent  mt-4 w-full h-14">
-                <div className=" h-10 w-[65%] bg-neutral-500/30 text-amber-100 backdrop-blur-sm rounded-full flex justify-center items-center ">
+                <div className=" h-10 w-[65%] bg-neutral-500/30 text-amber-100 backdrop-blur-sm rounded-full flex justify-center items-center dark:bg-neutral-800/30 dark:text-amber-50 ">
 
                 {category.title}
                 </div> 
                 
-                <div className=" h-10 w-[25%]  bg-black text-amber-50 text-2xl text-center flex justify-center items-center rounded-full "><GoArrowRight /></div>
+                <div className=" h-10 w-[25%]  bg-[var(--foreground)] text-[var(--background)] text-2xl text-center flex justify-center items-center rounded-full "><GoArrowRight /></div>
               </div>
 
 
@@ -92,8 +92,8 @@ export default function ProductCarousel({ categories }: ProductCarouselProps) {
             key={index}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
               index === selectedIndex
-                ? "bg-primary w-8"
-                : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                ? "bg-[var(--primary)] w-8"
+                : "bg-[var(--muted-foreground)]/30 hover:bg-[var(--muted-foreground)]/60"
             }`}
             onClick={() => emblaApi?.scrollTo(index)}
           />

@@ -1,6 +1,7 @@
 'use server';
 
 import { and, asc, count, desc, eq, ilike, or, sql, type SQL } from 'drizzle-orm';
+import { unstable_noStore as noStore } from 'next/cache';
 import { db } from '@/lib/db';
 import {
   products,
@@ -20,8 +21,10 @@ import { v4 as uuidv4 } from 'uuid';
 type ProductListItem = {
   id: string;
   title: string;
-  price: string;
+  minPrice: string;
+  maxPrice: string;
   imageUrl: string | null;
+  imageUrlHover?: string | null; // Added for the second image
   createdAt: Date;
   subtitle?: string | null;
 };
@@ -32,6 +35,7 @@ export type GetAllProductsResult = {
 };
 
 export async function getAllProducts(filters: NormalizedProductFilters): Promise<GetAllProductsResult> {
+  noStore();
   const conds: SQL[] = [eq(products.isPublished, true)];
 
   if (filters?.search) {
@@ -47,26 +51,47 @@ export async function getAllProducts(filters: NormalizedProductFilters): Promise
   const limit = Math.max(1, Math.min(filters?.limit, 60));
   const offset = (page - 1) * limit;
 
-  const primaryImageSubquery = db
+  const rankedImages = db
     .select({
       productId: productImages.productId,
       url: productImages.url,
+      rowNumber: sql<number>`row_number() OVER (PARTITION BY ${productImages.productId} ORDER BY ${productImages.isPrimary} DESC, ${productImages.sortOrder} ASC)`.as('rn'),
     })
     .from(productImages)
-    .where(eq(productImages.isPrimary, true))
+    .as('ranked_images');
+
+  const primaryImages = db
+    .select({
+      productId: rankedImages.productId,
+      url: rankedImages.url,
+    })
+    .from(rankedImages)
+    .where(eq(rankedImages.rowNumber, 1))
     .as('primary_image');
+
+  const secondaryImages = db
+    .select({
+      productId: rankedImages.productId,
+      url: rankedImages.url,
+    })
+    .from(rankedImages)
+    .where(eq(rankedImages.rowNumber, 2))
+    .as('secondary_image');
 
   const rows = await db
     .select({
       id: products.id,
       title: products.title,
-      price: products.price,
+      minPrice: products.minPrice,
+      maxPrice: products.maxPrice,
       createdAt: products.createdAt,
       subtitle: products.subtitle,
-      imageUrl: primaryImageSubquery.url,
+      imageUrl: primaryImages.url,
+      imageUrlHover: secondaryImages.url,
     })
     .from(products)
-    .leftJoin(primaryImageSubquery, eq(primaryImageSubquery.productId, products.id))
+    .leftJoin(primaryImages, eq(primaryImages.productId, products.id))
+    .leftJoin(secondaryImages, eq(secondaryImages.productId, products.id))
     .where(baseWhere)
     .orderBy(primaryOrder, asc(products.id))
     .limit(limit)
@@ -82,8 +107,10 @@ export async function getAllProducts(filters: NormalizedProductFilters): Promise
   const productsOut: ProductListItem[] = rows.map((r) => ({
     id: r.id,
     title: r.title,
-    price: r.price,
+    minPrice: r.minPrice,
+    maxPrice: r.maxPrice,
     imageUrl: r.imageUrl,
+    imageUrlHover: r.imageUrlHover, // Added for the second image
     createdAt: r.createdAt,
     subtitle: r.subtitle,
   }));
@@ -146,18 +173,23 @@ export async function addProduct(formData: FormData) {
     const title = formData.get('title') as string;
     const subtitle = formData.get('subtitle') as string;
     const description = formData.get('description') as string;
-    const price = parseFloat(formData.get('price') as string);
+    const minPrice = parseFloat(formData.get('minPrice') as string);
+    const maxPrice = parseFloat(formData.get('maxPrice') as string);
     const images = formData.getAll('images') as File[];
 
-    if (!title || !description || isNaN(price) || images.length === 0) {
-      return { error: 'Title, description, price, and at least one image are required.' };
+    // Sort images alphabetically by filename to ensure consistent order
+    images.sort((a, b) => a.name.localeCompare(b.name));
+
+    if (!title || !description || isNaN(minPrice) || isNaN(maxPrice) || images.length === 0) {
+      return { error: 'Title, description, min price, max price, and at least one image are required.' };
     }
 
     const newProduct = insertProductSchema.parse({
       title,
       subtitle,
       description,
-      price,
+      minPrice,
+      maxPrice,
       isPublished: true, // Default to published
     });
 
@@ -182,6 +214,7 @@ export async function addProduct(formData: FormData) {
         productId: insertedProduct.id,
         url: imageUrl,
         isPrimary: i === 0, // Set the first image as primary
+        sortOrder: i, // Explicitly set the sort order
       });
     }
 
@@ -193,6 +226,7 @@ export async function addProduct(formData: FormData) {
 }
 
 export async function getProductById(productId: string) {
+  noStore();
   const [product] = await db
     .select()
     .from(products)

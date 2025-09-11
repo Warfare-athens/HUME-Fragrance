@@ -1,5 +1,5 @@
 import { Card } from "@/components";
-import Filters from "@/components/Filters";
+// import Filters from "@/components/Filters";
 import Sort from "@/components/Sort";
 import { parseFilterParams } from "@/lib/utils/query";
 import { getAllProducts } from "@/lib/actions/product";
@@ -24,14 +24,14 @@ export default async function ProductsPage({
   );
   (sp.price ? (Array.isArray(sp.price) ? sp.price : [sp.price]) : []).forEach((p) => {
     const [min, max] = String(p).split("-");
-    const label = min && max ? `$${min} - $${max}` : min && !max ? `Over $${min}` : `$0 - $${max}`;
+    const label = min && max ? `${min} - ${max}` : min && !max ? `Over ${min}` : `$0 - ${max}`;
     activeBadges.push(label);
   });
 
   return (
     <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <header className="flex items-center justify-between py-6">
-        <h1 className="text-heading-3 text-dark-900">New ({totalCount})</h1>
+        <h1 className="text-heading-3 text-[var(--color-dark-900)]">New ({totalCount})</h1>
         <Sort />
       </header>
 
@@ -40,7 +40,7 @@ export default async function ProductsPage({
           {activeBadges.map((b, i) => (
             <span
               key={`${b}-${i}`}
-              className="rounded-full border border-light-300 px-3 py-1 text-caption text-dark-900"
+              className="rounded-full border border-[var(--color-light-300)] px-3 py-1 text-caption text-[var(--color-dark-900)]"
             >
               {b}
             </span>
@@ -48,29 +48,26 @@ export default async function ProductsPage({
         </div>
       )}
 
-      <section className="grid grid-cols-1 gap-6 md:grid-cols-[240px_1fr]">
-        <Filters />
+      {/* <section className="grid grid-cols-1 gap-6 md:grid-cols-[240px_1fr]"> */}
         <div>
           {products.length === 0 ? (
-            <div className="rounded-lg border border-light-300 p-8 text-center">
-              <p className="text-body text-dark-700">No products match your filters.</p>
+            <div className="rounded-lg border border-[var(--color-light-300)] p-8 text-center">
+              <p className="text-body text-[var(--color-dark-700)]">No products match your filters.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 pb-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4   pb-6">
               {products.map((p) => {
-                const price =
-                  p.minPrice !== null && p.maxPrice !== null && p.minPrice !== p.maxPrice
-                    ? `$${p.minPrice.toFixed(2)} - $${p.maxPrice.toFixed(2)}`
-                    : p.minPrice !== null
-                    ? p.minPrice
-                    : undefined;
+                const minPrice = Number(p.minPrice);
+                const maxPrice = Number(p.maxPrice);
+
                 return (
                   <Card
                     key={p.id}
-                    title={p.name}
+                    title={p.title}
                     subtitle={p.subtitle ?? undefined}
                     imageSrc={p.imageUrl ?? "/shoes/shoe-1.jpg"}
-                    price={price}
+                    minPrice={minPrice}
+                    maxPrice={maxPrice}
                     href={`/products/${p.id}`}
                   />
                 );
@@ -78,7 +75,7 @@ export default async function ProductsPage({
             </div>
           )}
         </div>
-      </section>
+      {/* </section> */}
     </main>
   );
 }

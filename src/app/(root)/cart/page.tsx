@@ -71,14 +71,14 @@ export default function CartPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold tracking-tight text-dark-900 sm:text-4xl">
+      <h1 className="text-3xl font-bold tracking-tight text-[var(--color-dark-900)] sm:text-4xl">
         Your Cart
       </h1>
 
       {items.length === 0 ? (
         <div className="mt-12 text-center">
-          <p className="text-lg text-dark-700">Your cart is empty.</p>
-          <Link href="/products" className="mt-4 inline-block rounded-md bg-dark-900 px-6 py-3 text-base font-medium text-light-100 hover:bg-dark-700">
+          <p className="text-lg text-[var(--color-dark-700)]">Your cart is empty.</p>
+          <Link href="/products" className="mt-4 inline-block rounded-md bg-[var(--color-dark-900)] px-6 py-3 text-base font-medium text-[var(--color-light-100)] hover:bg-[var(--color-dark-700)]">
               Continue Shopping
           </Link>
         </div>
@@ -87,7 +87,7 @@ export default function CartPage() {
           <section className={`lg:col-span-7 ${isUpdating ? "opacity-50" : ""}`}>
             <ul
               role="list"
-              className="divide-y divide-light-300 border-b border-t border-light-300"
+              className="divide-y divide-[var(--color-light-300)] border-b border-t border-[var(--color-light-300)]"
             >
               {items.map((item) => (
                 <li key={item.id} className="flex py-2 ">
@@ -108,13 +108,13 @@ export default function CartPage() {
                           <h3 className="text-sm">
                             <Link
                               href={`/products/${item.id}`}
-                              className="font-medium text-lg text-dark-900 hover:text-dark-700"
+                              className="font-medium text-lg text-[var(--color-dark-900)] hover:text-[var(--color-dark-700)]"
                             >
                               {item.name}
                             </Link>
                           </h3>
                         </div>
-                        <p className="mt-1 text-sm font-medium text-dark-900">
+                        <p className="mt-1 text-sm font-medium text-[var(--color-dark-900)]">
                           ${item.price.toFixed(2)}
                         </p>
                       </div>
@@ -127,11 +127,11 @@ export default function CartPage() {
                               handleUpdateQuantity(item.id, item.quantity - 1)
                             }
                             disabled={isUpdating}
-                            className="p-1.5 text-dark-700 hover:text-dark-900 disabled:opacity-50"
+                            className="p-1.5 text-[var(--color-dark-700)] hover:text-[var(--color-dark-900)] disabled:opacity-50"
                           >
                             <Minus className="h-5 w-5" />
                           </button>
-                          <span className="w-10 text-center text-sm font-medium text-dark-900">
+                          <span className="w-10 text-center text-sm font-medium text-[var(--color-dark-900)]">
                             {item.quantity}
                           </span>
                           <button
@@ -140,7 +140,7 @@ export default function CartPage() {
                               handleUpdateQuantity(item.id, item.quantity + 1)
                             }
                             disabled={isUpdating}
-                            className="p-1.5 text-dark-700 hover:text-dark-900 disabled:opacity-50"
+                            className="p-1.5 text-[var(--color-dark-700)] hover:text-[var(--color-dark-900)] disabled:opacity-50"
                           >
                             <Plus className="h-5 w-5" />
                           </button>
@@ -151,7 +151,7 @@ export default function CartPage() {
                             type="button"
                             onClick={() => handleRemoveItem(item.id)}
                             disabled={isUpdating}
-                            className="-m-2 inline-flex p-2 text-amber-50 rounded-md bg-black hover:bg-dark-700 disabled:opacity-50"
+                            className="-m-2 inline-flex p-2 text-[var(--background)] rounded-md bg-[var(--foreground)] hover:bg-[var(--color-dark-700)] disabled:opacity-50"
                           >
                             <Trash2 className="h-5 w-5" />
                           </button>
@@ -165,26 +165,26 @@ export default function CartPage() {
           </section>
 
           {/* Order summary */}
-          <section className="mt-16 rounded-lg bg-neutral-200 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
+          <section className="mt-16 rounded-lg bg-[var(--color-light-200)] px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
             <h2
               id="summary-heading"
-              className="text-lg font-medium text-dark-900"
+              className="text-lg font-medium text-[var(--color-dark-900)]"
             >
               Order summary
             </h2>
 
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
-                <dt className="text-sm text-dark-700">Subtotal</dt>
-                <dd className="text-sm font-medium text-dark-900">
+                <dt className="text-sm text-[var(--color-dark-700)]">Subtotal</dt>
+                <dd className="text-sm font-medium text-[var(--color-dark-900)]">
                   ${total.toFixed(2)}
                 </dd>
               </div>
-              <div className="flex items-center justify-between border-t border-light-300 pt-4">
-                <dt className="text-base font-medium text-dark-900">
+              <div className="flex items-center justify-between border-t border-[var(--color-light-300)] pt-4">
+                <dt className="text-base font-medium text-[var(--color-dark-900)]">
                   Order total
                 </dt>
-                <dd className="text-base font-medium text-dark-900">
+                <dd className="text-base font-medium text-[var(--color-dark-900)]">
                   ${total.toFixed(2)}
                 </dd>
               </div>
@@ -193,7 +193,7 @@ export default function CartPage() {
             <div className="mt-6">
               <button
                 type="submit"
-                className="w-full rounded-md border border-transparent bg-dark-900 px-4 py-3 text-base font-medium text-light-100 shadow-sm hover:bg-dark-700 focus:outline-none focus:ring-2 focus:ring-dark-500 focus:ring-offset-2 focus:ring-offset-light-100"
+                className="w-full rounded-md border border-transparent bg-[var(--color-dark-900)] px-4 py-3 text-base font-medium text-[var(--color-light-100)] shadow-sm hover:bg-[var(--color-dark-700)] focus:outline-none focus:ring-2 focus:ring-[var(--color-dark-500)] focus:ring-offset-2 focus:ring-offset-[var(--color-light-100)]"
               >
                 Checkout
               </button>

@@ -13,7 +13,8 @@ export default function AddProductPage() {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,8 +24,8 @@ export default function AddProductPage() {
     setLoading(true);
     setError(null);
 
-    if (!title || !description || !price || images.length === 0) {
-      setError("Title, description, price, and at least one image are required.");
+    if (!title || !description || !minPrice || !maxPrice || images.length === 0) {
+      setError("Title, description, min price, max price, and at least one image are required.");
       setLoading(false);
       return;
     }
@@ -33,7 +34,8 @@ export default function AddProductPage() {
     formData.append("title", title);
     formData.append("subtitle", subtitle);
     formData.append("description", description);
-    formData.append("price", price);
+    formData.append("minPrice", minPrice);
+    formData.append("maxPrice", maxPrice);
     images.forEach((image) => {
       formData.append("images", image);
     });
@@ -86,13 +88,24 @@ export default function AddProductPage() {
           />
         </div>
         <div>
-          <Label htmlFor="price">Price</Label>
+          <Label htmlFor="minPrice">Min Price</Label>
           <Input
-            id="price"
+            id="minPrice"
             type="number"
             step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="maxPrice">Max Price</Label>
+          <Input
+            id="maxPrice"
+            type="number"
+            step="0.01"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
             required
           />
         </div>
