@@ -1,40 +1,42 @@
 "use client";
 
-import React, { useState } from "react";
-import Card, { CardProps } from "@/components/Card"; // Assuming CardProps is exported from Card.tsx
+import React from "react";
+import Card from "@/components/Card"; // Assuming Card accepts these props
+
+// Define a Product type that matches the props used in Card
+export type Product = {
+  id: string;
+  title: string;
+  subtitle?: string;
+  imageSrc?: string;
+  imageSrcHover?: string;
+  minPrice?: string | number;
+  maxPrice?: string | number;
+  href?: string;
+};
 
 interface ProductGridWrapperProps {
-  products: CardProps[];
+  products: Product[];
 }
 
 const ProductGridWrapper: React.FC<ProductGridWrapperProps> = ({ products }) => {
-  const [isAnyProductHovered, setIsAnyProductHovered] = useState(false);
-
-  const handleMouseEnterGrid = () => {
-    setIsAnyProductHovered(true);
-  };
-
-  const handleMouseLeaveGrid = () => {
-    setIsAnyProductHovered(false);
-  };
+  
 
   return (
     <div
       className="grid grid-cols-2 gap-2 md:gap-6 md:grid-cols-3 lg:grid-cols-4 space-y-8 pb-6"
-      onMouseEnter={handleMouseEnterGrid}
-      onMouseLeave={handleMouseLeaveGrid}
+      
     >
       {products.map((p) => (
         <Card
           key={p.id}
           title={p.title}
-          subtitle={p.subtitle ?? undefined}
+          subtitle={p.subtitle}
           imageSrc={p.imageSrc ?? "/shoes/shoe-1.jpg"}
-          imageSrcHover={p.imageSrcHover ?? undefined}
+          imageSrcHover={p.imageSrcHover}
           minPrice={p.minPrice}
           maxPrice={p.maxPrice}
           href={p.href}
-          isGlobalHovered={isAnyProductHovered} // Pass the global hover state
         />
       ))}
     </div>

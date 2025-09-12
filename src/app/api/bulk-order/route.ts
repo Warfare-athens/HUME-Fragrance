@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer'; // Import nodemailer
+import nodemailer from 'nodemailer';
+
+// Define the type (outside the function, at the top)
+interface SelectedProduct {
+  title: string;
+  quantity: string;
+}
 
 export async function POST(request: Request) {
   try {
@@ -13,19 +19,18 @@ export async function POST(request: Request) {
     console.log('Notes:', notes);
     console.log('Selected Products:', selectedProducts);
 
-    // Implement email sending logic here.
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // or your email service
+      service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
 
-    // Email to the business owner (athensdubeyofficial@gmail.com)
+    // Email to the business owner
     const ownerMailOptions = {
       from: process.env.EMAIL_USER,
-      to: 'athensdubeyofficial@gmail.com', // The recipient of the bulk order request
+      to: 'athensdubeyofficial@gmail.com',
       subject: 'New Bulk Order Quote Request',
       html: `
         <p><strong>Email:</strong> ${email}</p>
@@ -34,7 +39,9 @@ export async function POST(request: Request) {
         <p><strong>Notes:</strong> ${notes || 'N/A'}</p>
         <h3>Products:</h3>
         <ul>
-          ${selectedProducts.map((p: any) => `<li>${p.title}: ${p.quantity}</li>`).join('')}
+          ${selectedProducts
+            .map((p: SelectedProduct) => `<li>${p.title}: ${p.quantity}</li>`)
+            .join('')}
         </ul>
       `,
     };
@@ -44,7 +51,7 @@ export async function POST(request: Request) {
     // Email to the client (confirmation)
     const clientMailOptions = {
       from: process.env.EMAIL_USER,
-      to: email, // Send to the client's email address
+      to: email,
       subject: 'Your Bulk Order Request Confirmation - HUME Fragrance',
       html: `
         <p>Dear Customer,</p>
@@ -52,7 +59,9 @@ export async function POST(request: Request) {
         <p>Here are the details of your request:</p>
         <h3>Products:</h3>
         <ul>
-          ${selectedProducts.map((p: any) => `<li>${p.title}: ${p.quantity}</li>`).join('')}
+          ${selectedProducts
+            .map((p: SelectedProduct) => `<li>${p.title}: ${p.quantity}</li>`)
+            .join('')}
         </ul>
         <p>We will contact you at ${email} or ${contact || 'the provided address'} to discuss your quote.</p>
         <p>Best regards,</p>
@@ -62,7 +71,10 @@ export async function POST(request: Request) {
 
     await transporter.sendMail(clientMailOptions);
 
-    return NextResponse.json({ message: 'Bulk order request received successfully! A confirmation email has been sent to you.' }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Bulk order request received successfully! A confirmation email has been sent to you.' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error processing bulk order request:', error);
     return NextResponse.json({ message: 'Error processing request.' }, { status: 500 });

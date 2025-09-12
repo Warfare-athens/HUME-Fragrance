@@ -1,20 +1,33 @@
 'use server';
 
-import { and, eq, inArray } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import { db } from '@/lib/db';
-import {
-  carts,
-  cartItems,
-  products,
-  guests,
-} from '@/lib/db/schema';
+import { carts, cartItems, products, guests } from '@/lib/db/schema';
 import { getCurrentUser } from '@/lib/auth/actions';
 import { randomUUID } from 'crypto';
 
+// Fix: specify a type for cookieStore to avoid `any`
+type CookieStore = {
+  get(name: string): { value: string } | undefined;
+  set(
+    name: string,
+    value: string,
+    options: {
+      httpOnly: boolean;
+      secure: boolean;
+      sameSite: 'strict' | 'lax' | 'none';
+      path: string;
+      expires: Date;
+    }
+  ): void;
+};
+
 export async function getCart() {
   const user = await getCurrentUser();
-  const guestSessionToken = (await cookies().get('guest_session'))?.value;
+
+  const cookieStore = cookies() as unknown as CookieStore;
+  const guestSessionToken = cookieStore.get('guest_session')?.value;
 
   let cart;
 
@@ -30,9 +43,7 @@ export async function getCart() {
     }
   }
 
-  if (!cart) {
-    return null;
-  }
+  if (!cart) return null;
 
   const cartItemsWithDetails = await db
     .select({
@@ -50,6 +61,7 @@ export async function getCart() {
   };
 }
 
+// Helper to create a new cart
 async function createCart(userId?: string, guestId?: string) {
   const [newCart] = await db
     .insert(carts)
@@ -62,12 +74,14 @@ async function createCart(userId?: string, guestId?: string) {
   return newCart;
 }
 
+// Get or create a cart
 async function getOrCreateCart() {
   let cart = await getCart();
 
   if (!cart) {
     const user = await getCurrentUser();
-    const guestSessionToken = (await cookies().get('guest_session'))?.value;
+    const cookieStore = cookies() as unknown as CookieStore;
+    const guestSessionToken = cookieStore.get('guest_session')?.value;
 
     if (user) {
       cart = await createCart(user.id);
@@ -80,39 +94,40 @@ async function getOrCreateCart() {
         cart = await createCart(undefined, guest.id);
       }
     } else {
-        // Create a guest session and cart
-        const sessionToken = randomUUID();
-        const now = new Date();
-        const expiresAt = new Date(now.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
-        const [newGuest] = await db.insert(guests).values({ sessionToken, expiresAt }).returning();
-        cookies().set('guest_session', sessionToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            path: '/',
-            expires: expiresAt,
-        });
-        cart = await createCart(undefined, newGuest.id);
+      // Create guest session and cart
+      const sessionToken = randomUUID();
+      const now = new Date();
+      const expiresAt = new Date(now.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
+      const [newGuest] = await db
+        .insert(guests)
+        .values({ sessionToken, expiresAt })
+        .returning();
+
+      cookieStore.set('guest_session', sessionToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        path: '/',
+        expires: expiresAt,
+      });
+
+      cart = await createCart(undefined, newGuest.id);
     }
   }
 
   return cart;
 }
 
-export async function addToCart(productId: string, quantity: number) { // Changed from variantId
+// Add product to cart
+export async function addToCart(productId: string, quantity: number) {
   const cart = await getOrCreateCart();
-  if (!cart) {
-    throw new Error('Could not create or find a cart');
-  }
+  if (!cart) throw new Error('Could not create or find a cart');
 
   const [existingItem] = await db
     .select()
     .from(cartItems)
     .where(
-      and(
-        eq(cartItems.cartId, cart.id),
-        eq(cartItems.productId, productId) // Changed from productVariantId
-      )
+      and(eq(cartItems.cartId, cart.id), eq(cartItems.productId, productId))
     );
 
   if (existingItem) {
@@ -123,7 +138,7 @@ export async function addToCart(productId: string, quantity: number) { // Change
   } else {
     await db.insert(cartItems).values({
       cartId: cart.id,
-      productId: productId, // Changed from productVariantId
+      productId,
       quantity,
     });
   }
@@ -131,37 +146,48 @@ export async function addToCart(productId: string, quantity: number) { // Change
   return await getCart();
 }
 
-export async function updateCartItemQuantity(productId: string, quantity: number) { // Changed from variantId
-    const cart = await getCart();
-    if (!cart) {
-        throw new Error('Cart not found');
-    }
+// Update item quantity
+export async function updateCartItemQuantity(
+  productId: string,
+  quantity: number
+) {
+  const cart = await getCart();
+  if (!cart) throw new Error('Cart not found');
 
-    if (quantity <= 0) {
-        return await removeCartItem(productId);
-    }
+  if (quantity <= 0) return await removeCartItem(productId);
 
-    const [itemToUpdate] = await db.select().from(cartItems).where(and(eq(cartItems.cartId, cart.id), eq(cartItems.productId, productId))); // Changed from productVariantId
+  const [itemToUpdate] = await db
+    .select()
+    .from(cartItems)
+    .where(
+      and(eq(cartItems.cartId, cart.id), eq(cartItems.productId, productId))
+    );
 
-    if (itemToUpdate) {
-        await db.update(cartItems).set({ quantity }).where(eq(cartItems.id, itemToUpdate.id));
-    }
+  if (itemToUpdate) {
+    await db
+      .update(cartItems)
+      .set({ quantity })
+      .where(eq(cartItems.id, itemToUpdate.id));
+  }
 
-    return await getCart();
+  return await getCart();
 }
 
+// Remove item from cart
+export async function removeCartItem(productId: string) {
+  const cart = await getCart();
+  if (!cart) throw new Error('Cart not found');
 
-export async function removeCartItem(productId: string) { // Changed from variantId
-    const cart = await getCart();
-    if (!cart) {
-        throw new Error('Cart not found');
-    }
+  const [itemToRemove] = await db
+    .select()
+    .from(cartItems)
+    .where(
+      and(eq(cartItems.cartId, cart.id), eq(cartItems.productId, productId))
+    );
 
-    const [itemToRemove] = await db.select().from(cartItems).where(and(eq(cartItems.cartId, cart.id), eq(cartItems.productId, productId))); // Changed from productVariantId
+  if (itemToRemove) {
+    await db.delete(cartItems).where(eq(cartItems.id, itemToRemove.id));
+  }
 
-    if (itemToRemove) {
-        await db.delete(cartItems).where(eq(cartItems.id, itemToRemove.id));
-    }
-
-    return await getCart();
+  return await getCart();
 }

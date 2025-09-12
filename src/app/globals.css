@@ -22,9 +22,6 @@
   --color-red: #d33918;
   --color-orange: #d37918;
 
-  --font-clash: var(--font-clash), sans-serif;
-  --font-italianno: var(--font-italianno), cursive;
-
   /* Heading sizes */
   --text-heading-1: 72px;
   --text-heading-1--line-height: 78px;

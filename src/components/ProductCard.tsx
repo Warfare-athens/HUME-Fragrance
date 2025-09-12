@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import Image from "next/image";
 
 interface ProductCardProps {
   title: string;
@@ -11,10 +12,11 @@ export default function ProductCard({ title, description, image, imageAlt }: Pro
   return (
     <Card className="group relative overflow-hidden bg-card border-0 shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1">
       <div className="aspect-[4/3] overflow-hidden bg-gradient-soft">
-        <img
+        <Image
           src={image}
           alt={imageAlt}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>

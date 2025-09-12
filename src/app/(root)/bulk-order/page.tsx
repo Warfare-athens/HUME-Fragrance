@@ -1,5 +1,5 @@
 "use client"
-import { getAllProducts } from "@/lib/actions/product";
+
 import Image from "next/image";
 import { useState } from "react";
 

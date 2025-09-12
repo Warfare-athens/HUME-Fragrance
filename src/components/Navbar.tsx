@@ -9,7 +9,7 @@ import { RiMenu4Line } from "react-icons/ri";
 import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 
-const NAV_LINKS = [] as const;
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

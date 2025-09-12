@@ -188,8 +188,8 @@ export async function addProduct(formData: FormData) {
       title,
       subtitle,
       description,
-      minPrice,
-      maxPrice,
+      minPrice: String(minPrice),
+      maxPrice: String(maxPrice),
       isPublished: true, // Default to published
     });
 

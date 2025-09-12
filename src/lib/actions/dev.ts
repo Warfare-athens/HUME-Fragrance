@@ -31,12 +31,12 @@ export async function deleteAllProducts() {
         await fs.unlink(filePath);
         console.log(`Deleted file: ${filePath}`);
         deletedFiles++;
-      } catch (fileError: any) {
+      } catch (err: unknown) {
         // It's possible the file doesn't exist, so we log and continue
-        if (fileError.code === 'ENOENT') {
+        if (err instanceof Error && 'code' in err && err.code === 'ENOENT') {
           console.warn(`File not found, skipping: ${image.url}`);
         } else {
-          console.error(`Error deleting file ${image.url}:`, fileError);
+          console.error(`Error deleting file ${image.url}:`, err);
         }
       }
     }

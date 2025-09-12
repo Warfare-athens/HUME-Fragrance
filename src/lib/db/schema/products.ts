@@ -25,8 +25,8 @@ export const insertProductSchema = z.object({
   title: z.string().min(1),
   subtitle: z.string().optional(),
   description: z.string().min(1),
-  minPrice: z.number(),
-  maxPrice: z.number(),
+  minPrice: z.string(),
+  maxPrice: z.string(),
   isPublished: z.boolean().optional(),
 
   createdAt: z.date().optional(),

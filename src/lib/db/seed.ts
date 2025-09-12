@@ -1,9 +1,7 @@
 import { db } from '@/lib/db';
 import {
   brands, categories, collections, productCollections,
-  products, reviews, orderItems, cartItems,
-  payments, orders, wishlists, carts, addresses, accounts, sessions,
-  verifications, guests, users,
+  products,
   insertBrandSchema,
   insertCategorySchema, insertCollectionSchema, insertProductSchema,
   type InsertProduct,
@@ -15,20 +13,12 @@ import { v4 as uuidv4 } from 'uuid';
 type ProductRow = typeof products.$inferSelect;
 
 
-type RGBHex = `#${string}`;
+
 
 const log = (...args: unknown[]) => console.log('[seed]', ...args);
 const err = (...args: unknown[]) => console.error('[seed:error]', ...args);
 
-function pick<T>(arr: T[], n: number) {
-  const a = [...arr];
-  const out: T[] = [];
-  for (let i = 0; i < n && a.length; i++) {
-    const idx = Math.floor(Math.random() * a.length);
-    out.push(a.splice(idx, 1)[0]);
-  }
-  return out;
-}
+
 
 function randInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -68,7 +58,7 @@ async function seed() {
       if (!exists.length) await db.insert(collections).values(row);
     }
 
-    const humeBrand = (await db.select().from(brands).where(eq(brands.slug, 'hume-fragrance')))[0];
+    
     const oilsCat = (await db.select().from(categories).where(eq(categories.slug, 'essential-oils')))[0];
     const blendsCat = (await db.select().from(categories).where(eq(categories.slug, 'blends')))[0];
     const singlesCat = (await db.select().from(categories).where(eq(categories.slug, 'singles')))[0];

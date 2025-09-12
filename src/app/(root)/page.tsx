@@ -1,14 +1,12 @@
 
-import React from "react";
-import { getCurrentUser } from "@/lib/auth/actions";
+
 import { getAllProducts } from "@/lib/actions/product";
 import Categories from "@/components/Categories";
 import Showcase from "@/components/Showcase";
 import ProductGridWrapper from "@/components/ProductGridWrapper";
 
 const Home = async () => {
-  const user = await getCurrentUser();
-  const { products, totalCount } = await getAllProducts({});
+  const { products } = await getAllProducts({});
 
   return (
     <main className="mx-auto mt-6  max-w-7xl px-0 sm:px-0 lg:px-0">

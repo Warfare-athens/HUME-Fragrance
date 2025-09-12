@@ -5,15 +5,19 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { GoArrowRight } from "react-icons/go";
 import { CiBookmarkPlus } from "react-icons/ci";
+import { StaticImageData } from "next/image";
+
+type Category = {
+  title: string;
+  description: string;
+  image: string | StaticImageData;
+  imageAlt: string;
+};
 
 interface ProductCarouselProps {
-  categories: {
-    title: string;
-    description: string;
-    image: string;
-    imageAlt: string;
-  }[];
+  categories: Category[];
 }
+
 
 export default function ProductCarousel({ categories }: ProductCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);

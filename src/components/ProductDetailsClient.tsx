@@ -1,13 +1,21 @@
 "use client";
 
-import Link from "next/link";
-import { Card,
+import {
   CollapsibleSection,
   ProductGallery,
 } from "@/components";
-import { useCartStore } from "@/store/cart";
+
 import ProductActions from "@/components/ProductActions";
 import { type Review } from "@/lib/actions/product"; // Removed RecommendedProduct
+
+
+
+type ProductImage = {
+  id: string;
+  url: string;
+  alt?: string;
+};
+
 
 function formatPrice(price: number | null | undefined) {
   if (price === null || price === undefined) return undefined;
@@ -20,16 +28,10 @@ export default function ProductDetailsClient({
   reviews,
 }: {
   product: { id: string; minPrice: string | number; maxPrice: string | number; description: string; title: string; subtitle?: string; };
-  images: any[];
+  images: ProductImage[];
   reviews: Review[];
 }) {
-  const addToCart = useCartStore((state) => state.addItem);
-
   const reviewsCount = reviews.length;
-  const reviewsAvg =
-    reviewsCount > 0
-      ? reviews.reduce((s, r) => s + r.rating, 0) / reviewsCount
-      : 0;
 
   const variants = [{
     color: 'default',
@@ -47,7 +49,7 @@ export default function ProductDetailsClient({
 
         <div className="flex flex-col gap-6 ">
           <header className="flex flex-col lg:mt-10  gap-2">
-            <h1 className=" font-clash text-3xl text-[var(--color-dark-900)]">{product.title}</h1>
+            <h1 className="  text-3xl text-[var(--color-dark-900)]">{product.title}</h1>
             {product.subtitle && (
               <p className="text-body text-[var(--color-dark-700)]">{product.subtitle}</p>
             )}

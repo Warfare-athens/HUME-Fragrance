@@ -3,11 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import SocialProviders from "./SocialProviders";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type Props = {
   mode: "sign-in" | "sign-up";
-  onSubmit: (formData: FormData) => Promise<{ ok: boolean; userId?: string } | void>;
+  onSubmit: (formData: FormData) => Promise<{ ok: boolean; userId?: string }>;
 };
 
 export default function AuthForm({ mode, onSubmit }: Props) {
@@ -22,11 +22,11 @@ export default function AuthForm({ mode, onSubmit }: Props) {
     try {
       const result = await onSubmit(formData);
 
-      if(result?.ok) router.push("/");
+      if (result?.ok) router.push("/");
     } catch (e) {
       console.log("error", e);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -57,10 +57,7 @@ export default function AuthForm({ mode, onSubmit }: Props) {
         <hr className="h-px w-full border-0 bg-[var(--color-light-300)]" />
       </div>
 
-      <form
-        className="space-y-4"
-        onSubmit={handleSubmit}
-      >
+      <form className="space-y-4" onSubmit={handleSubmit}>
         {mode === "sign-up" && (
           <div className="space-y-1">
             <label htmlFor="name" className="text-caption text-[var(--color-dark-900)]">

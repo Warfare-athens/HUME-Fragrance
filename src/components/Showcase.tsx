@@ -1,10 +1,9 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Zap, Shield, Cpu, Smartphone, Monitor, Globe } from "lucide-react"
-import { useEffect, useState } from "react";
+import { Zap } from "lucide-react"
 import Link from "next/link"
+import ImageRotator from "./ImageRotator"
 
 
 
@@ -76,24 +75,7 @@ const showcaseImages = [
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20 p-1 md:p-10">
                 {/* Image Rotator */}
-                {(() => {
-                  const [current, setCurrent] = useState(0);
-
-                  useEffect(() => {
-                    const interval = setInterval(() => {
-                      setCurrent((prev) => (prev + 1) % showcaseImages.length);
-                    }, 2000);
-                    return () => clearInterval(interval);
-                  }, []);
-
-                  return (
-                    <img
-                      src={showcaseImages[current].src}
-                      alt={showcaseImages[current].alt}
-                      className="w-full h-auto rounded-lg shadow-2xl transition-all duration-700"
-                    />
-                  );
-                })()}
+                <ImageRotator images={showcaseImages} />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent rounded-2xl"></div>
               </div>
             </div>
